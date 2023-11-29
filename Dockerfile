@@ -4,9 +4,9 @@ RUN apt install -y build-essential wget curl tar gzip autoconf git bzip2
 
 FROM build as build-bash
 RUN mkdir /build
-RUN curl -s http://ftp.gnu.org/gnu/bash/bash-5.2.15.tar.gz -o /build/bash.tar.gz
+RUN curl -s http://ftp.gnu.org/gnu/bash/bash-5.2.21.tar.gz -o /build/bash.tar.gz
 RUN cd /build; tar xzf bash.tar.gz
-WORKDIR /build/bash-5.2.15
+WORKDIR /build/bash-5.2.21
 RUN ./configure --bindir=/bin/ --enable-static-link
 RUN make
 
@@ -20,7 +20,7 @@ RUN echo "CONFIG_STATIC=y" >> .config
 RUN make
 
 FROM scratch
-COPY --from=build-bash /build/bash-5.2.15/bash /bin/bash
+COPY --from=build-bash /build/bash-5.2.21/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
 COPY --from=build-busybox /build/busybox-1.36.1/busybox /bin/busybox
 WORKDIR /bin/
