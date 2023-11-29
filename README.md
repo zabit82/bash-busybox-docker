@@ -3,5 +3,5 @@
 Test image 
 
 ```sh
-docker pull devops005/bash-busybox
+docker run -it devops005/bash-busybox bash
 ```
