@@ -1,8 +1,8 @@
-FROM debian:12 as deb-builder
+FROM debian:12 AS deb-builder
 RUN apt update
 RUN apt install -y build-essential wget curl tar gzip autoconf git bzip2
 
-FROM deb-builder as build-bash
+FROM deb-builder AS build-bash
 RUN mkdir /build
 RUN curl -s http://ftp.gnu.org/gnu/bash/bash-5.2.37.tar.gz -o /build/bash.tar.gz
 RUN cd /build; tar xzf bash.tar.gz
@@ -10,7 +10,7 @@ WORKDIR /build/bash-5.2.37
 RUN ./configure --bindir=/bin/ --enable-static-link
 RUN make
 
-FROM deb-builder as build-busybox
+FROM deb-builder AS build-busybox
 RUN mkdir /build
 RUN curl -s https://busybox.net/downloads/busybox-1.37.0.tar.bz2 -o /build/busybox.tar.bz2
 RUN cd /build; tar xjf busybox.tar.bz2 ; cd /build/busybox-1.37.0
