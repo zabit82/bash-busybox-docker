@@ -12,12 +12,11 @@ jobs:
 
     runs-on: self-hosted
     permissions:
-      contents: read
-      pages: write
       id-token: write
-
-
+      attestations: write
+      
     steps:
+    
     - uses: actions/checkout@v4
     
     - name: Log in to Docker Hub
