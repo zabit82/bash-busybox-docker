@@ -1,5 +1,7 @@
 name: Docker Image CI
-
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: devops005/bash-busybox
 on:
   push:
     branches: [ "main" ]
