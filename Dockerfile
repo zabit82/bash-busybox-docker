@@ -22,7 +22,7 @@ RUN make
 FROM scratch
 COPY --from=build-bash /build/bash-5.2.37/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
-COPY --from=build-busybox /build/busybox-1.36.1/busybox /bin/busybox
+COPY --from=build-busybox /build/busybox-1.37.0/busybox /bin/busybox
 WORKDIR /bin/
 RUN busybox mkdir -p /usr/bin /usr/sbin /sbin
 RUN busybox --install
