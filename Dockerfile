@@ -26,3 +26,9 @@ COPY --from=build-busybox /build/busybox-1.37.0/busybox /bin/busybox
 WORKDIR /bin/
 RUN busybox mkdir -p /usr/{bin,sbin,share,local} /sbin /etc/ssl /var
 RUN busybox --install
+RUN rm -rf /linuxrc
+RUN touch /etc/shadow /etc/passwd /etc/group
+RUN echo root:!:18768:0:99999:7::: > /etc/shadow
+RUN echo root:x:0: > /etc/group
+RUN root:x:0:0:root:/root:/bin/bash > /etc/passwd
+
