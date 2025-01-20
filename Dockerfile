@@ -30,5 +30,5 @@ RUN rm -rf /linuxrc
 RUN touch /etc/shadow /etc/passwd /etc/group
 RUN echo root:!:18768:0:99999:7::: > /etc/shadow
 RUN echo root:x:0: > /etc/group
-RUN root:x:0:0:root:/root:/bin/bash > /etc/passwd
+RUN echo root:x:0:0:root:/root:/bin/bash > /etc/passwd
 
