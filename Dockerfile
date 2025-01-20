@@ -23,7 +23,6 @@ FROM alpine:3.21 as reference
 RUN apk add --no-cache ca-certificates tzdata
 
 FROM scratch
-COPY --from=reference /relocate /
 COPY --from=build-bash /build/bash-5.2.37/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
 COPY --from=build-busybox /build/busybox-1.37.0/busybox /bin/busybox
