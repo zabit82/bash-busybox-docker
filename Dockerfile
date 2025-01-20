@@ -19,10 +19,22 @@ RUN make defconfig
 RUN echo "CONFIG_STATIC=y" >> .config
 RUN make
 
+FROM alpine:3.21 as reference
+RUN apk add --no-cache ca-certificates tzdata
+RUN mkdir -p /relocate/bin /relocate/sbin /relocate/etc /relocate/etc/ssl /relocate/usr/bin /relocate/usr/sbin /relocate/usr/share
+RUN cp -pr /tmp /relocate
+RUN cp -pr /etc/passwd /etc/group /etc/hostname /etc/hosts /etc/shadow /etc/protocols /etc/services /etc/nsswitch.conf /relocate/etc
+RUN cp -pr /usr/share/ca-certificates /relocate/usr/share
+RUN cp -pr /usr/share/zoneinfo /relocate/usr/share
+RUN cp -pr /etc/ssl/cert.pem /relocate/etc/ssl
+RUN cp -pr /etc/ssl/certs /relocate/etc/ssl
+
+
+
 FROM scratch
+COPY --from=reference /relocate /
 COPY --from=build-bash /build/bash-5.2.37/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
 COPY --from=build-busybox /build/busybox-1.37.0/busybox /bin/busybox
 WORKDIR /bin/
-RUN busybox mkdir -p /usr/bin /usr/sbin /sbin
 RUN busybox --install
