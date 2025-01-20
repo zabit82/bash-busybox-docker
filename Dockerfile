@@ -20,14 +20,15 @@ RUN echo "CONFIG_STATIC=y" >> .config
 RUN make
 
 FROM alpine:3.21 as reference
-RUN apk add --no-cache ca-certificates tzdata
-RUN mkdir -p /relocate/bin /relocate/sbin /relocate/etc /relocate/etc/ssl /relocate/usr/bin /relocate/usr/sbin /relocate/usr/share
-RUN cp -pr /tmp /relocate
-RUN cp -pr /etc/passwd /etc/group /etc/hostname /etc/hosts /etc/shadow /etc/protocols /etc/services /etc/nsswitch.conf /relocate/etc
-RUN cp -pr /usr/share/ca-certificates /relocate/usr/share
-RUN cp -pr /usr/share/zoneinfo /relocate/usr/share
-RUN cp -pr /etc/ssl/cert.pem /relocate/etc/ssl
-RUN cp -pr /etc/ssl/certs /relocate/etc/ssl
+RUN apk add --no-cache ca-certificates tzdata && \
+    mkdir -p /relocate/{bin,sbin,etc/ssl,usr/{bin,sbin,share}} && \
+    cp -pr /tmp /relocate && \
+    cp -pr /etc/{passwd,group,hostname,hosts,protocols,services,nsswitch.conf} /relocate/etc && \
+    cp -pr /usr/share/{ca-certificates,zoneinfo} /relocate/usr/share && \
+    cp -pr /etc/ssl/{cert.pem,certs} /relocate/etc/ssl && \
+    # Create a minimal shadow file with locked root account
+    echo 'root:*:18000:0:99999:7:::' > /relocate/etc/shadow && \
+    chmod 600 /relocate/etc/shadow
 
 
 
