@@ -4,9 +4,9 @@ RUN apt install -y build-essential wget curl tar gzip autoconf git bzip2
 
 FROM deb-builder AS build-bash
 RUN mkdir /build
-RUN curl -s http://ftp.gnu.org/gnu/bash/bash-5.2.37.tar.gz -o /build/bash.tar.gz
+RUN curl -L http://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz -o /build/bash.tar.gz
 RUN cd /build; tar xzf bash.tar.gz
-WORKDIR /build/bash-5.2.37
+WORKDIR /build/bash-5.3
 RUN ./configure --bindir=/bin/ --enable-static-link
 RUN make
 
