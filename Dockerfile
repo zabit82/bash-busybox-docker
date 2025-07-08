@@ -20,7 +20,7 @@ RUN echo "CONFIG_STATIC=y" >> .config
 RUN make
 
 FROM scratch
-COPY --from=build-bash /build/bash-5.2.37/bash /bin/bash
+COPY --from=build-bash /build/bash-5.3/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
 COPY --from=build-busybox /build/busybox-1.37.0/busybox /bin/busybox
 WORKDIR /bin/
