@@ -40,8 +40,11 @@
 
 ### Изменено — `.github/workflows/docker-image.yml`
 
-- **Добавлено кеширование Buildx** (`cache-from`/`cache-to: type=gha`) — заметное
-  ускорение повторных сборок.
+- **Добавлено кеширование Buildx** (`cache-from: type=gha`, `cache-to: type=gha,mode=max,ignore-error=true`) — заметное
+  ускорение повторных сборок и устойчивость к временным сбоям сервиса кеша GitHub.
+- **Актуализированы версии GitHub Actions:** переход на стабильные релизы (`actions/checkout@v4`,
+  `docker/login-action@v3`, `docker/setup-qemu-action@v3`, `docker/setup-buildx-action@v3`,
+  `docker/build-push-action@v6`, `actions/attest-build-provenance@v2`).
 - **Push ограничен только push-событиями.** На pull request теперь выполняется
   только сборка (без логина в Docker Hub и без `push: true`), чтобы в реестр не
   попадали мусорные теги вида `pr-*`.
