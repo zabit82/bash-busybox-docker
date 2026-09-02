@@ -48,4 +48,6 @@
 - **Push ограничен только push-событиями.** На pull request теперь выполняется
   только сборка (без логина в Docker Hub и без `push: true`), чтобы в реестр не
   попадали мусорные теги вида `pr-*`.
+- **Включена Multi-arch сборка (`linux/amd64`, `linux/arm64`):** параметр `platforms` в `docker/build-push-action` обновлен до `linux/amd64,linux/arm64` с автоматической кросс-компиляцией через QEMU.
 - **Явные `permissions`:** добавлено `contents: read`.
+
