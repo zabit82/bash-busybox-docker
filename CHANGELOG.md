@@ -32,8 +32,10 @@
 - **Исправлен сбой стадии `reference`**: Alpine выполняет `RUN` через
   busybox-ash, который не поддерживает brace expansion (`{a,b,c}`), из-за чего
   `cp` не находил файлы. Пути в `mkdir`/`cp` расписаны явно.
-- **Исправлено предупреждение `UndefinedVar`**: `ARG BASH_VERSION`/
-  `BUSYBOX_VERSION` перенесены выше `LABEL` в финальной стадии `scratch`.
+- **Исправлен сбой сборки BusyBox 1.37.0 на non-x86/ARM64**: отключены
+  флаги `CONFIG_SHA1_HWACCEL` и `CONFIG_SHA256_HWACCEL`, вызывавшие ошибку
+  компиляции из-за вызова x86-специфичных инструкций SHA-NI. Применение
+  `CONFIG_STATIC=y` переведено на `sed` с последующим `yes "" | make oldconfig`.
 - Добавлен заголовок `# syntax=docker/dockerfile:1`.
 
 ### Изменено — `.github/workflows/docker-image.yml`

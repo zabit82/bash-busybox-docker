@@ -31,8 +31,13 @@ RUN mkdir /build \
     && echo "${BUSYBOX_SHA256}  /build/busybox.tar.bz2" | sha256sum -c - \
     && tar xjf /build/busybox.tar.bz2 -C /build
 WORKDIR /build/busybox-${BUSYBOX_VERSION}
+# Применяем конфигурацию по умолчанию, гарантируем статическую линковку и
+# отключаем SHA1/SHA256 HWACCEL, вызывающие сбой компиляции на non-x86/ARM64 в BusyBox 1.37.0
 RUN make defconfig \
-    && echo "CONFIG_STATIC=y" >> .config \
+    && sed -i 's/.*CONFIG_STATIC.*/CONFIG_STATIC=y/' .config \
+    && sed -i 's/CONFIG_SHA1_HWACCEL=y/# CONFIG_SHA1_HWACCEL is not set/' .config \
+    && sed -i 's/CONFIG_SHA256_HWACCEL=y/# CONFIG_SHA256_HWACCEL is not set/' .config \
+    && yes "" | make oldconfig \
     && make -j"$(nproc)"
 
 FROM alpine:3.24 AS reference
