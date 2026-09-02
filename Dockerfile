@@ -4,7 +4,8 @@ ARG DEB_BASE=debian:12
 ARG BASH_VERSION=5.2.37
 ARG BASH_SHA256=9599b22ecd1d5787ad7d3b7bf0c59f312b3396d1e281175dd1f8a4014da621ff
 ARG BUSYBOX_VERSION=1.38.0
-ARG BUSYBOX_SHA256=3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4
+# Контрольная сумма SHA-256 для busybox-1.38.0.tar.bz2
+ARG BUSYBOX_SHA256=34f9ea6ff8636f2c9241153b9114eefa9e65674a45318ae1ef95bb5f31c53bb2
 
 FROM ${DEB_BASE} AS deb-builder
 RUN apt-get update \
@@ -32,7 +33,7 @@ RUN mkdir /build \
     && tar xjf /build/busybox.tar.bz2 -C /build
 WORKDIR /build/busybox-${BUSYBOX_VERSION}
 # Применяем конфигурацию по умолчанию, гарантируем статическую линковку и
-# отключаем SHA1/SHA256 HWACCEL, вызывающие сбой компиляции на non-x86/ARM64 в BusyBox 1.37.0
+# отключаем SHA1/SHA256 HWACCEL, вызывающие сбой компиляции на non-x86/ARM64 в BusyBox 1.37.0 / 1.38.0
 RUN make defconfig \
     && sed -i 's/.*CONFIG_STATIC.*/CONFIG_STATIC=y/' .config \
     && sed -i 's/CONFIG_SHA1_HWACCEL=y/# CONFIG_SHA1_HWACCEL is not set/' .config \
