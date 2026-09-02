@@ -9,7 +9,7 @@ ARG BUSYBOX_SHA256=3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b83704
 FROM ${DEB_BASE} AS deb-builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        build-essential wget curl tar gzip bzip2 autoconf git ca-certificates \
+    build-essential wget curl tar gzip bzip2 autoconf git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 FROM deb-builder AS build-bash
@@ -35,14 +35,14 @@ RUN make defconfig \
     && echo "CONFIG_STATIC=y" >> .config \
     && make -j"$(nproc)"
 
-FROM alpine:3.21 AS reference
+FROM alpine:3.24 AS reference
 # NB: alpine RUN использует busybox-ash, который не поддерживает
 # brace expansion ({a,b,c}) — пути указываются явно.
 RUN apk add --no-cache ca-certificates tzdata \
     && mkdir -p /relocate/bin /relocate/sbin /relocate/etc/ssl \
-               /relocate/usr/bin /relocate/usr/sbin /relocate/usr/share \
+    /relocate/usr/bin /relocate/usr/sbin /relocate/usr/share \
     && cp -pr /etc/passwd /etc/group /etc/hostname /etc/hosts \
-              /etc/protocols /etc/services /etc/nsswitch.conf /relocate/etc \
+    /etc/protocols /etc/services /etc/nsswitch.conf /relocate/etc \
     && cp -pr /usr/share/ca-certificates /usr/share/zoneinfo /relocate/usr/share \
     && cp -pr /etc/ssl/cert.pem /etc/ssl/certs /relocate/etc/ssl \
     && echo 'root:*:18000:0:99999:7:::' > /relocate/etc/shadow \
@@ -52,7 +52,7 @@ FROM scratch
 ARG BASH_VERSION
 ARG BUSYBOX_VERSION
 LABEL org.opencontainers.image.title="bash-busybox" \
-      org.opencontainers.image.version="${BASH_VERSION}-${BUSYBOX_VERSION}"
+    org.opencontainers.image.version="${BASH_VERSION}-${BUSYBOX_VERSION}"
 COPY --from=reference /relocate /
 COPY --from=build-bash /build/bash-${BASH_VERSION}/bash /bin/bash
 SHELL ["/bin/bash", "-c"]
